@@ -1,7 +1,6 @@
 import React from 'react';
 
 import Section from 'components/Section';
-import Heading from 'components/Heading';
 import CardRow from 'components/CardRow';
 import RepositoryCard from 'components/RepositoryCard';
 
@@ -21,8 +20,7 @@ const repositories = [
 ];
 
 const TopRepositories = () =>
-  (<Section>
-    <Heading>Top Repositories</Heading>
+  (<Section title="Top Repositories">
     <CardRow>
       {repositories.map(({ name }) => <RepositoryCard key={name} name={name}/>)}
     </CardRow>
