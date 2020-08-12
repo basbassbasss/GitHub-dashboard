@@ -4,6 +4,7 @@ html, body {
   margin: 0;
 
   font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background-color: rgb(250, 250, 250);
 }
 
 #root {
