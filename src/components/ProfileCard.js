@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 
@@ -6,21 +6,23 @@ import Heading from 'components/Heading';
 import Text from 'components/Text';
 import ProjectBox from 'components/ProjectBox';
 import Followers from 'components/Followers';
+import CardButton from 'components/CardButton';
 
 const ProfileCardContainer = styled.div`
   width: 270px;
-  background-color: ${({ theme }) => theme.colors.white};
+  background-color: ${({ backgroundColor, theme }) => theme.colors[backgroundColor] ?? theme.colors.white};
   display: flex;
   flex-direction: column;
   align-items: center;
   border-radius: ${({ theme }) => theme.radius.main};
   box-shadow: ${({ theme }) => theme.shadows.main};
+  position: relative;
 `;
 
 const Header = styled.div`
   height: 50px;
   width: 100%;
-  background-color: ${({ theme }) => theme.colors.primary};
+  background-color: ${({ withoutBackground, theme }) => withoutBackground ? '' : theme.colors.primary};
   margin-bottom: 40px;
   position: relative;
 `;
@@ -31,6 +33,16 @@ const HeaderBackgroundImage = styled.img`
   width: 100%;
   position: absolute;
   object-fit: cover;
+  opacity: 0.2;
+`;
+
+const BackgroundImage = styled.div`
+  background-image: url(${({ avatar }) => avatar});
+  background-position: center center;
+  background-size: cover;
+  width: 100%;
+  height: 100%;
+  position: absolute;
   opacity: 0.2;
 `;
 
@@ -58,6 +70,8 @@ const Content = styled.div`
   & > h2, & > span {
     margin-bottom: ${({ theme }) => theme.spacing.tiny};
   }
+
+  z-index: 1;
 `;
 
 const Seperator = styled.div`
@@ -71,21 +85,63 @@ const StyledProjectBox = styled(ProjectBox)`
   width: 100%;
 `;
 
-const ProfileCard = ({ name, email, followers, avatar, project }) => (
-  <ProfileCardContainer>
-    <Header>
-      {avatar && <HeaderBackgroundImage src={avatar}/>}
-      {avatar && <Avatar src={avatar}/>}
-    </Header>
-    <Content>
-      <Heading as="h2" weight="bold">{name}</Heading>
-      <Text as="span">{email}</Text>
-      {followers >= 0 && <Followers count={followers}/>}
-      <Seperator/>
-      {project && <StyledProjectBox {...project} />}
-    </Content>
-  </ProfileCardContainer>
-);
+const StyledCardButton = styled(CardButton)`
+  margin-top: 20px;
+  z-index: 1;
+`;
+
+const ProfileCard = ({ name, email, followers, avatar, project }) => {
+  const [isHovered, setIsHovered] = useState(false);
+
+  const renderPersonalInfo = () => {
+    return (
+      <>
+        <Heading as="h2" weight="bold" color={isHovered && 'white'}>{name}</Heading>
+        <Text as="span" color={isHovered && 'white'}>{email}</Text>
+        {followers >= 0 && <Followers count={followers} color={isHovered && 'white'}/>}
+      </>
+    );
+  }
+
+  const renderProfileCard = () => {
+    if (isHovered) {
+      return (
+        <>
+          <BackgroundImage avatar={avatar}/>
+          <Header withoutBackground>
+            <Avatar src={avatar}/>
+          </Header>
+          <Content>
+            {renderPersonalInfo()}
+          </Content>
+          <StyledCardButton/>
+        </>
+      );
+    }
+
+    return (
+      <>
+        <Header>
+          {avatar && <HeaderBackgroundImage src={avatar}/>}
+          {avatar && <Avatar src={avatar}/>}
+        </Header>
+        <Content>
+          {renderPersonalInfo()}
+          <Seperator/>
+          {project && <StyledProjectBox {...project} />}
+        </Content>
+      </>
+    );
+  }
+
+  return (<ProfileCardContainer
+    backgroundColor={isHovered && 'primary'}
+    onMouseEnter={() => setIsHovered(true)}
+    onMouseLeave={() => setIsHovered(false)}
+  >
+    {renderProfileCard()}
+  </ProfileCardContainer>);
+};
 
 ProfileCard.propTypes = {
   name: PropTypes.string,

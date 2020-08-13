@@ -31,6 +31,7 @@ Heading.propTypes = {
 Heading.defaultProps = {
   weight: 'regular',
   size: 'regular',
+  color: 'primary',
 };
 
 export default Heading;

@@ -14,24 +14,28 @@ const StyledFollowerIcon = styled(FollowerIcon)`
   width: 20px;
   height: 20px;
   margin-right: 4px;
-  color: ${({ theme }) => theme.colors.primary};
+  color: ${({ color, theme }) => theme.colors[color] ?? theme.colors.primary};
 `;
 
-const Followers = ({ className, count }) => (
+const Followers = ({ className, count, color }) => (
   <FollowersContainer className={className}>
-    <StyledFollowerIcon/>
-    <Text as="span">
-      <Text weight="medium" as="span">{count}</Text> followers
+    <StyledFollowerIcon color={color} />
+    <Text as="span" color={color}>
+      <Text weight="medium" as="span" color={color}>{count}</Text> followers
     </Text>
   </FollowersContainer>
 );
 
 Followers.propTypes = {
+  className: PropTypes.string,
   count: PropTypes.number,
+  color: PropTypes.string,
 };
 
 Followers.defaultProps = {
+  className: null,
   count: 0,
+  color: null,
 };
 
 export default Followers;
