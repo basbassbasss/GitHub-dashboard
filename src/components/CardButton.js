@@ -11,6 +11,7 @@ const CardButtonContainer = styled.a`
    text-transform: uppercase;
    border: 1px solid #fff;
    border-radius: ${({ theme }) => theme.radius.main};
+   text-decoration: none;
 
   &:hover {
     background-color: ${({ theme }) => theme.colors.white};
@@ -18,8 +19,8 @@ const CardButtonContainer = styled.a`
   }
 `;
 
-const CardButton = ({ className }) => {
-  return <CardButtonContainer className={className}>CardButton</CardButtonContainer>
+const CardButton = ({ className, children, ...props }) => {
+  return <CardButtonContainer className={className} {...props}>{children}</CardButtonContainer>
 };
 
 CardButton.propTypes = {

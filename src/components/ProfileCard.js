@@ -90,7 +90,7 @@ const StyledCardButton = styled(CardButton)`
   z-index: 1;
 `;
 
-const ProfileCard = ({ name, email, followers, avatar, project }) => {
+const ProfileCard = ({ name, email, followers, avatar, url, project }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   const renderPersonalInfo = () => {
@@ -114,7 +114,7 @@ const ProfileCard = ({ name, email, followers, avatar, project }) => {
           <Content>
             {renderPersonalInfo()}
           </Content>
-          <StyledCardButton/>
+          <StyledCardButton href={url} target="_blank" rel="noopener noreferrer">Open Profile</StyledCardButton>
         </>
       );
     }
@@ -148,6 +148,7 @@ ProfileCard.propTypes = {
   email: PropTypes.string,
   followers: PropTypes.number,
   avatar: PropTypes.string,
+  url: PropTypes.string,
 };
 
 ProfileCard.defaultProps = {
@@ -155,6 +156,7 @@ ProfileCard.defaultProps = {
   email: '',
   followers: null,
   avatar: null,
+  url: null,
 };
 
 export default ProfileCard;
