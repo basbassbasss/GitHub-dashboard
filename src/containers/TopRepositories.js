@@ -1,39 +1,54 @@
 import React from 'react';
+import { useQuery } from '@apollo/client';
+import gql from 'graphql-tag';
+import dayjs from 'dayjs';
 
 import Section from 'components/Section';
 import CardRow from 'components/CardRow';
 import RepositoryCard from 'components/RepositoryCard';
 
-const repositories = [
-  {
-    name: 'Repo A',
-    description: 'This is my hello world project! This is my hello world project! This is my hello world project!',
-    stars: 123132,
-  },
-  {
-    name: 'Repo B',
-    description: 'This is my hello world project! This is my hello world project! This is my hello world project!',
-    stars: 121
-  },
-  {
-    name: 'Repo C',
-    description: 'This is my hello world project! This is my hello world project! This is my hello world project!',
-    stars: 976
-  },
-  {
-    name: 'Repo D',
-    description: 'This is my hello world project! This is my hello world project! This is my hello world project!',
-    stars: 1238
+const TOP_REPOSITORIES = gql`
+  query topRepos($query: String!) {
+    search(first: 4, query: $query, type: REPOSITORY) {
+      nodes {
+        ... on Repository {
+          id
+          name
+          description
+          stargazers {
+            totalCount
+          }
+        }
+      }
+    }
   }
-];
+`;
 
-const borderColors = ['blue', 'cyan','lime', 'yellow'];
+const borderColors = ['blue', 'cyan', 'lime', 'yellow'];
 
-const TopRepositories = () =>
-  (<Section title="Top Repositories">
+const TopRepositories = () => {
+  const oneYearAgo = dayjs().subtract(1, 'year').format('YYYY-MM-D');
+  const { loading, error, data } = useQuery(TOP_REPOSITORIES, {
+    variables: {
+      query: `created:>${oneYearAgo} sort:stars`,
+    }
+  });
+
+  return (<Section
+    title="Top Repositories"
+    loading={loading}
+    error={error}
+  >
     <CardRow>
-      {repositories.map((repository, index) => <RepositoryCard key={repository.name} borderColor={borderColors[index]} {...repository} />)}
+      {data?.search?.nodes?.map(({ id, name, description, stargazers }, index) => <RepositoryCard
+        key={id}
+        borderColor={borderColors[index]}
+        name={name}
+        description={description}
+        stars={stargazers?.totalCount}
+      />)}
     </CardRow>
   </Section>);
+}
 
 export default TopRepositories;

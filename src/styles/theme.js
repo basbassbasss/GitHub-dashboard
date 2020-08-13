@@ -4,6 +4,7 @@ export default {
     white: 'rgb(255, 255, 255)',
     gray: 'rgb(213, 216, 221)',
     orange: 'rgb(245, 166, 35)',
+    darkGray: 'rgb(169, 169, 169)',
 
     blue: 'rgb(91, 142, 220)',
     cyan: 'rgb(80, 227, 194)',

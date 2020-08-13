@@ -6,6 +6,7 @@ import TopRepositories from "containers/TopRepositories";
 import ActiveUsers from "containers/ActiveUsers";
 
 import 'styles/style.css';
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css"
 
 const Container = styled.div`
   display: flex;
