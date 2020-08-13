@@ -96,9 +96,9 @@ const ProfileCard = ({ name, email, followers, avatar, url, project }) => {
   const renderPersonalInfo = () => {
     return (
       <>
-        <Heading as="h2" weight="bold" color={isHovered && 'white'}>{name}</Heading>
-        <Text as="span" color={isHovered && 'white'}>{email}</Text>
-        {followers >= 0 && <Followers count={followers} color={isHovered && 'white'}/>}
+        <Heading as="h2" weight="bold" color={isHovered ? 'white' : 'primary'}>{name}</Heading>
+        <Text as="span" color={isHovered ? 'white' : 'primary'}>{email ? email : `-`}</Text>
+        {followers >= 0 && <Followers count={followers} color={isHovered ? 'white' : 'primary'}/>}
       </>
     );
   }
