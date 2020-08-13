@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 
 import FollowerIcon from 'assets/icons/FollowerIcon';
+import Text from 'components/Text';
 
 const FollowersContainer = styled.div`
   display: flex;
@@ -16,15 +17,12 @@ const StyledFollowerIcon = styled(FollowerIcon)`
   color: ${({ theme }) => theme.colors.primary};
 `;
 
-const Count = styled.span`
-  font-size: 13px;
-  color: ${({ theme }) => theme.colors.primary};
-`;
-
 const Followers = ({ className, count }) => (
   <FollowersContainer className={className}>
-    <StyledFollowerIcon />
-    <Count>{count} followers</Count>
+    <StyledFollowerIcon/>
+    <Text as="span">
+      <Text weight="medium" as="span">{count}</Text> followers
+    </Text>
   </FollowersContainer>
 );
 

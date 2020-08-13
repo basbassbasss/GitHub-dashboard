@@ -1,10 +1,26 @@
+import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 
-const Text = styled.span`
+const fontWeights = {
+  'regular': 400,
+  'medium': 700,
+};
+
+const Text = styled.p`
   font-family: 'Open Sans';
-  font-weight: 600;
   font-size: 13px;
-  color: ${({ theme }) => theme.colors.primary};
+  font-weight: ${({ weight }) => fontWeights[weight] ?? fontWeights.regular};
+  color: ${({ color, theme }) => theme.colors[color] || theme.colors.primary};
+  margin: 0;
+  letter-spacing: -0.5px;
 `;
+
+Text.propTypes = {
+  weight: PropTypes.oneOf(Object.keys(fontWeights)),
+};
+
+Text.defaultProps = {
+  weight: 'regular',
+};
 
 export default Text;

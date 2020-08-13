@@ -1,11 +1,36 @@
 import styled from '@emotion/styled';
+import PropTypes from 'prop-types';
 
-const Heading = styled.h1`
-  color: ${({ theme }) => theme.colors.primary};
+const fontWeights = {
+  'regular': 400,
+  'semi-bold': 600,
+  'bold': 700,
+};
+
+const fontSizes = {
+  'medium': '15px',
+  'regular': '16px',
+  'large': '18px',
+}
+
+const Heading = styled.p`
   font-family: 'Open Sans';
-  font-weight: 800;
-  font-size: 16px;
+  font-size: ${({ size }) => fontSizes[size] ?? fontSizes.regular };
+  font-weight: ${({ weight }) => fontWeights[weight] ?? fontWeights.regular};
+  color: ${({ color, theme }) => theme.colors[color] || theme.colors.primary};
   margin: 0;
+  padding: 0;
+  letter-spacing: -0.5px;
 `;
+
+Heading.propTypes = {
+  weight: PropTypes.oneOf(Object.keys(fontWeights)),
+  size: PropTypes.oneOf(Object.keys(fontSizes)),
+};
+
+Heading.defaultProps = {
+  weight: 'regular',
+  size: 'regular',
+};
 
 export default Heading;

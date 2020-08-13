@@ -14,7 +14,7 @@ const StyledHeading = styled(Heading)`
 
 const Section = ({ title, children }) => (
   <SectionContainer>
-    <StyledHeading as="h1">{title}</StyledHeading>
+    <StyledHeading as="h1" size="large" weight="semi-bold">{title}</StyledHeading>
     {children}
   </SectionContainer>
 );

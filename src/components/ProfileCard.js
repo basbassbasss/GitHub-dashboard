@@ -13,14 +13,15 @@ const ProfileCardContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-bottom: 20px;
+  border-radius: ${({ theme }) => theme.radius.main};
+  box-shadow: ${({ theme }) => theme.shadows.main};
 `;
 
 const Header = styled.div`
   height: 50px;
   width: 100%;
   background-color: ${({ theme }) => theme.colors.primary};
-  margin-bottom: 50px;
+  margin-bottom: 40px;
   position: relative;
 `;
 
@@ -43,41 +44,60 @@ const Avatar = styled.img`
   border-radius: 50%;
 `;
 
-const PersonalInfo = styled.div`
+const Content = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: ${({ theme }) => theme.spacing.small};
+  margin-top: 12px;
+  margin-left: ${({ theme }) => theme.spacing.medium};
+  margin-right: ${({ theme }) => theme.spacing.medium};
+  margin-bottom: ${({ theme }) => theme.spacing.medium};
+
+  width: calc(100% - 48px);
 
   & > h2, & > span {
     margin-bottom: ${({ theme }) => theme.spacing.tiny};
   }
 `;
 
-const ProfileCard = ({ name, email, avatar, project }) => (
+const Seperator = styled.div`
+  width: 100%;
+  background-color: ${({ theme }) => theme.colors.gray};
+  height: 1px;
+  margin: ${({ theme }) => theme.spacing.small} 0;
+`;
+
+const StyledProjectBox = styled(ProjectBox)`
+  width: 100%;
+`;
+
+const ProfileCard = ({ name, email, followers, avatar, project }) => (
   <ProfileCardContainer>
     <Header>
       {avatar && <HeaderBackgroundImage src={avatar}/>}
       {avatar && <Avatar src={avatar}/>}
     </Header>
-    <PersonalInfo>
-      <Heading as="h2">{name}</Heading>
-      <Text>{email}</Text>
-      <Followers count={343} />
-    </PersonalInfo>
-    {project && <ProjectBox {...project} />}
+    <Content>
+      <Heading as="h2" weight="bold">{name}</Heading>
+      <Text as="span">{email}</Text>
+      {followers >= 0 && <Followers count={followers}/>}
+      <Seperator/>
+      {project && <StyledProjectBox {...project} />}
+    </Content>
   </ProfileCardContainer>
 );
 
 ProfileCard.propTypes = {
   name: PropTypes.string,
   email: PropTypes.string,
+  followers: PropTypes.number,
   avatar: PropTypes.string,
 };
 
 ProfileCard.defaultProps = {
   name: '',
   email: '',
+  followers: null,
   avatar: null,
 };
 

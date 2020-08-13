@@ -7,11 +7,11 @@ import Stars from 'components/Stars';
 import Heading from 'components/Heading';
 
 const ProjectBoxContainer = styled.div`
-  width: 200px;
-  border-radius: 3px;
+  border-radius: ${({ theme }) => theme.radius.main};
   padding: ${({ theme }) => theme.spacing.small};
   border: 1px ${({ theme }) => theme.colors.gray} solid;
   border-left: 3px ${({ theme }) => theme.colors.primary} solid;
+  box-sizing: border-box;
 `;
 
 const Header = styled.div`
@@ -25,13 +25,12 @@ const StyledStars = styled(Stars)`
   margin-left: auto;
 `;
 
-const ProjectBox = ({ name, description, stars }) => (
-  <ProjectBoxContainer>
+const ProjectBox = ({ name, description, stars, className }) => (
+  <ProjectBoxContainer className={className}>
     <Header>
-      <Heading as="h3">{name}</Heading>
+      <Heading as="h3" size="medium" weight="semi-bold">{name}</Heading>
       <StyledStars count={stars} />
     </Header>
-    {/* TODO: wrap text that's too long */ }
     <Text>{description}</Text>
   </ProjectBoxContainer>
 );
@@ -40,6 +39,7 @@ ProjectBox.propTypes = {
   name: PropTypes.string,
   description: PropTypes.string,
   stars: PropTypes.number,
+  className: PropTypes.string,
 }
 
 ProjectBox.defaultProps = {
