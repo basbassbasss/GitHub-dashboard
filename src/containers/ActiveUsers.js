@@ -3,48 +3,69 @@ import React from 'react';
 import Section from 'components/Section';
 import CardRow from 'components/CardRow';
 import ProfileCard from 'components/ProfileCard';
+import gql from "graphql-tag";
+import { useQuery } from '@apollo/client';
+import dayjs from 'dayjs';
 
-const users = [
-  {
-    name: 'David',
-    email: 'david@test.com',
-    followers: 100,
-    avatar: 'https://avatars0.githubusercontent.com/u/3605090?s=460&u=7e6d96f08ad8dfe91b265cc8c658acdead6857b8&v=4',
-    project: {
-      name: 'First project',
-      description: 'First project description',
-      stars: 123,
-    }
-  },
-  {
-    name: 'Miguel',
-    email: 'miguel@test.com',
-    followers: 0,
-    avatar: 'https://avatars0.githubusercontent.com/u/3605090?s=460&u=7e6d96f08ad8dfe91b265cc8c658acdead6857b8&v=4',
-    project: {
-      name: 'First project',
-      description: 'First project description',
-      stars: 123,
-    }
-  },
-  {
-    name: 'Sebastian',
-    email: 'sbstn@hey.com',
-    followers: 0,
-    avatar: 'https://avatars0.githubusercontent.com/u/3605090?s=460&u=7e6d96f08ad8dfe91b265cc8c658acdead6857b8&v=4',
-    project: {
-      name: 'First project',
-      description: 'First project description',
-      stars: 123,
+const ACTIVE_USERS = gql`
+  query activeUsers($query: String!) {
+    search(first: 3, query: $query, type: USER) {
+      userCount
+      nodes {
+        ... on User {
+          id
+          name
+          email
+          avatarUrl
+          url
+          followers {
+            totalCount
+          }
+          repositories(first: 1, orderBy: {field: STARGAZERS, direction: DESC}) {
+            nodes {
+              name
+              description
+              stargazers {
+                totalCount
+              }
+            }
+          }
+        }
+      }
     }
   }
-];
+`;
 
-const ActiveUsers = () =>
-  (<Section title="Active users">
+const ActiveUsers = () => {
+  const oneWeekAgo = dayjs().subtract(1, 'year').format('YYYY-MM-D');
+  const today = dayjs().format('YYYY-MM-D');
+  const { loading, error, data } = useQuery(ACTIVE_USERS, {
+    variables: {
+      query: `type:user created:>${oneWeekAgo} created:<${today} followers:>100 followers:<500`,
+    }
+  });
+
+  return (<Section
+    title="Active Users"
+    loading={loading}
+    error={error}
+  >
     <CardRow>
-      {users.map((user) => <ProfileCard key={user.name} {...user} />)}
+      {data?.search?.nodes?.map(({ id, name, email, avatarUrl, url, followers, repositories }) => <ProfileCard
+        key={id}
+        name={name}
+        email={email}
+        avatar={avatarUrl}
+        url={url}
+        followers={followers?.totalCount}
+        project={{
+          name: repositories?.nodes[0]?.name,
+          description: repositories?.nodes[0]?.description,
+          stars: repositories?.nodes[0]?.stargazers?.totalCount,
+        }}
+      />)}
     </CardRow>
   </Section>);
+};
 
 export default ActiveUsers;
